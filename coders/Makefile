@@ -21,7 +21,7 @@ SRC		=	codexion.c \
 OBJS	=	$(SRC:.c=.o)
 
 CC		=	cc
-CFLAGS	=	-Wall -Werror -Wextra -pthread
+CFLAGS	=	-Wall -Werror -Wextra -pthread -g
 RM		=	rm -rf
 
 $(NAME): $(OBJS)
@@ -32,14 +32,12 @@ $(NAME): $(OBJS)
 
 all: $(NAME)
 
-
-clean: 
+clean:
 	$(RM) $(OBJS)
 
 fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all
-
 
 .PHONY:	all clean fclean re

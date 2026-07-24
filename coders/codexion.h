@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 16:38:48 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/22 14:55:24 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/24 14:21:37 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,9 @@ typedef struct s_all
 	int					running;
 	pthread_mutex_t		running_mutex;
 	pthread_mutex_t		message_mutex;
+
+	pthread_mutex_t		start_mutex;
+	pthread_cond_t		start_cond;
 	pthread_t			monitor;
 	t_dongle			*dongles;
 	t_coder				*coders;
@@ -150,7 +153,6 @@ void					coder_compile(t_coder *coder);
 void					coder_debug(t_coder *coder);
 void					coder_refactor(t_coder *coder);
 
-void					start_program(t_all *all);
 
 void					heap_push(t_heap *heap, t_coder *coder);
 t_coder					*heap_peek(t_heap *heap);

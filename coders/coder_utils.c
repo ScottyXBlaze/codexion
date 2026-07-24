@@ -38,7 +38,7 @@ int	init_coders(t_all *all)
 		return (0);
 	}
 	if (!init_thread_coders(all->coders))
-		return (destroy_dongles(all), 1);
+		return (destroy_dongles(all), 0);
 	return (1);
 }
 
