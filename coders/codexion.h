@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 16:38:48 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/24 14:21:37 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/26 19:50:57 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,6 @@ void					print_state(t_coder *coder, t_state state);
 void					coder_compile(t_coder *coder);
 void					coder_debug(t_coder *coder);
 void					coder_refactor(t_coder *coder);
-
 
 void					heap_push(t_heap *heap, t_coder *coder);
 t_coder					*heap_peek(t_heap *heap);
