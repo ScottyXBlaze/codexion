@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 16:38:48 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/26 19:50:57 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/26 22:45:56 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,6 @@ typedef struct s_coder
 
 	t_all				*all;
 }						t_coder;
-
-int						ft_isspace(char c);
 
 int						validate_int(char *str);
 int						validate_scheduler(char *str);

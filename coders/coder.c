@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:44:58 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/22 14:44:59 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/26 22:51:56 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static void	run_loop(t_coder *coder)
 	coder_refactor(coder);
 }
 
-static void wait_running(t_coder *coder)
+static void	wait_running(t_coder *coder)
 {
 	while (!is_running(coder->all))
 	{
@@ -100,4 +100,3 @@ static void wait_running(t_coder *coder)
 	coder->last_compile = get_time(coder->all);
 	pthread_mutex_unlock(&coder->mutex);
 }
-

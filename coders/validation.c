@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   validate_int.c                                     :+:      :+:    :+:   */
+/*   validation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 16:52:03 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/22 08:45:28 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/26 22:46:08 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
 static int	ft_isnumber(char c);
+static int	ft_isspace(char c);
 static char	*remove_unnecessary(char *str);
 
 int	validate_int(char *str)
@@ -58,7 +59,7 @@ static char	*remove_unnecessary(char *str)
 	return (&str[i]);
 }
 
-int	ft_isspace(char c)
+static int	ft_isspace(char c)
 {
 	return (c == ' ' || (9 <= c && c <= 13));
 }
