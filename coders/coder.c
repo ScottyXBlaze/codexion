@@ -15,17 +15,14 @@
 static int	one_coder_case(t_coder *coder);
 static int	reserve_dongle(t_coder *coder);
 static void	run_loop(t_coder *coder);
+static void	wait_running(t_coder *coder);
 
 void	*coder_loop(void *args)
 {
 	t_coder	*coder;
 
 	coder = (t_coder *)args;
-	while (!is_running(coder->all))
-		usleep(300);
-	pthread_mutex_lock(&coder->mutex);
-	coder->last_compile = get_time(coder->all);
-	pthread_mutex_unlock(&coder->mutex);
+	wait_running(coder);
 	if (coder->all->params.nb_coders == 1)
 		return (one_coder_case(coder), NULL);
 	while (is_running(coder->all))
@@ -92,3 +89,15 @@ static void	run_loop(t_coder *coder)
 	coder_debug(coder);
 	coder_refactor(coder);
 }
+
+static void wait_running(t_coder *coder)
+{
+	while (!is_running(coder->all))
+	{
+		usleep(500);
+	}
+	pthread_mutex_lock(&coder->mutex);
+	coder->last_compile = get_time(coder->all);
+	pthread_mutex_unlock(&coder->mutex);
+}
+
