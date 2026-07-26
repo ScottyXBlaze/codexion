@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:44:58 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/26 22:51:56 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/26 23:33:57 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	one_coder_case(t_coder *coder)
 {
 	if (!lock_dongle(coder, coder->l_dongle))
 		return (0);
-	print_state(coder, take_dongle);
+	print_state(coder, TAKE_DONGLE);
 	while (is_running(coder->all))
 		usleep(500);
 	unlock_dongle(coder->all, coder->l_dongle);
@@ -58,25 +58,25 @@ static int	reserve_dongle(t_coder *coder)
 	{
 		if (!lock_dongle(coder, coder->r_dongle))
 			return (0);
-		print_state(coder, take_dongle);
+		print_state(coder, TAKE_DONGLE);
 		if (!lock_dongle(coder, coder->l_dongle))
 		{
 			unlock_dongle(coder->all, coder->r_dongle);
 			return (0);
 		}
-		print_state(coder, take_dongle);
+		print_state(coder, TAKE_DONGLE);
 	}
 	else
 	{
 		if (!lock_dongle(coder, coder->l_dongle))
 			return (0);
-		print_state(coder, take_dongle);
+		print_state(coder, TAKE_DONGLE);
 		if (!lock_dongle(coder, coder->r_dongle))
 		{
 			unlock_dongle(coder->all, coder->l_dongle);
 			return (0);
 		}
-		print_state(coder, take_dongle);
+		print_state(coder, TAKE_DONGLE);
 	}
 	return (1);
 }

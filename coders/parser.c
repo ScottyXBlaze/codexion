@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 16:50:20 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/23 12:43:42 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/26 23:33:17 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ static int	validate_args(int argc, char **argv)
 static t_scheduler	scheduler(char *str)
 {
 	if (strcmp(str, "fifo") == 0)
-		return (fifo);
-	return (edf);
+		return (FIFO);
+	return (EDF);
 }
 
 static void	print_help(void)

@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 23:39:22 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/14 16:48:54 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/26 23:33:59 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	coder_compile(t_coder *coder)
 {
-	print_state(coder, compile);
+	print_state(coder, COMPILE);
 	ft_sleep(coder->all->params.compile, coder->all);
 	pthread_mutex_lock(&coder->mutex);
 	coder->compile_count++;
@@ -24,13 +24,13 @@ void	coder_compile(t_coder *coder)
 
 void	coder_debug(t_coder *coder)
 {
-	print_state(coder, debug);
+	print_state(coder, DEBUG);
 	ft_sleep(coder->all->params.debug, coder->all);
 }
 
 void	coder_refactor(t_coder *coder)
 {
-	print_state(coder, refactor);
+	print_state(coder, REFACTOR);
 	ft_sleep(coder->all->params.refactor, coder->all);
 }
 
@@ -40,15 +40,15 @@ void	print_state(t_coder *coder, t_state state)
 
 	pthread_mutex_lock(&coder->all->message_mutex);
 	time = get_time(coder->all);
-	if (is_running(coder->all) || state == burned_out)
+	if (is_running(coder->all) || state == BURNED_OUT)
 	{
-		if (state == take_dongle)
+		if (state == TAKE_DONGLE)
 			printf("%ld %d has taken a dongle\n", time, coder->id);
-		else if (state == compile)
+		else if (state == COMPILE)
 			printf("%ld %d is compiling\n", time, coder->id);
-		else if (state == debug)
+		else if (state == DEBUG)
 			printf("%ld %d is debugging\n", time, coder->id);
-		else if (state == refactor)
+		else if (state == REFACTOR)
 			printf("%ld %d is refactoring\n", time, coder->id);
 		else
 			printf("%ld %d burned out\n", time, coder->id);

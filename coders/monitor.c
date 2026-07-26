@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:46:18 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/22 16:34:02 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/26 23:33:58 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	check_coders(t_all *all, long int now)
 		if (!finished && now - last > all->params.burnout)
 		{
 			stop_simulation(all);
-			print_state(&all->coders[i], burned_out);
+			print_state(&all->coders[i], BURNED_OUT);
 			return (1);
 		}
 		if (!finished)

@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 16:38:48 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/26 22:45:56 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/26 23:33:58 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,17 @@ typedef struct s_dongle
 
 typedef enum s_scheduler
 {
-	fifo,
-	edf,
+	FIFO,
+	EDF,
 }						t_scheduler;
 
 typedef enum s_state
 {
-	compile,
-	debug,
-	refactor,
-	take_dongle,
-	burned_out,
+	COMPILE,
+	DEBUG,
+	REFACTOR,
+	TAKE_DONGLE,
+	BURNED_OUT,
 }						t_state;
 
 typedef struct s_params
@@ -139,8 +139,8 @@ void					*coder_loop(void *args);
 void					*monitor_loop(void *args);
 
 int						can_take_dongle(t_all *all, t_dongle *dongle);
-void					unlock_dongle(t_all *all, t_dongle *dongle);
 int						lock_dongle(t_coder *coder, t_dongle *dongle);
+void					unlock_dongle(t_all *all, t_dongle *dongle);
 
 int						lock_dongle_fifo(t_coder *coder, t_dongle *dongle);
 int						lock_dongle_edf(t_coder *coder, t_dongle *dongle);
