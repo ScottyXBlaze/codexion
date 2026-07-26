@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/07 21:47:31 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/11 00:40:55 by nyramana         ###   ########.fr       */
+/*   Created: 2026/07/27 00:36:57 by nyramana          #+#    #+#             */
+/*   Updated: 2026/07/27 00:38:04 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,36 +15,34 @@
 void	fifo_push(t_fifo *fifo, t_coder *coder)
 {
 	pthread_mutex_lock(&fifo->mutex);
-	if (fifo->size < fifo->capacity)
+	if (fifo->count < 2)
 	{
-		fifo->array[fifo->tail] = coder;
-		fifo->tail = (fifo->tail + 1) % fifo->capacity;
-		fifo->size++;
+		fifo->array[fifo->count] = coder;
+		fifo->count++;
 	}
 	pthread_mutex_unlock(&fifo->mutex);
-}
-
-t_coder	*fifo_front(t_fifo *fifo)
-{
-	t_coder	*coder;
-
-	pthread_mutex_lock(&fifo->mutex);
-	coder = NULL;
-	if (fifo->size > 0)
-		coder = fifo->array[fifo->head];
-	pthread_mutex_unlock(&fifo->mutex);
-	return (coder);
 }
 
 void	fifo_pop(t_fifo *fifo)
 {
 	pthread_mutex_lock(&fifo->mutex);
-	if (fifo->size > 0)
+	if (fifo->count > 0)
 	{
-		fifo->head = (fifo->head + 1) % fifo->capacity;
-		fifo->size--;
+		fifo->array[0] = fifo->array[1];
+		fifo->array[1] = NULL;
+		fifo->count--;
 	}
 	pthread_mutex_unlock(&fifo->mutex);
+}
+
+int	is_my_turn_fifo(t_fifo *fifo, t_coder *coder)
+{
+	int	my_turn;
+
+	pthread_mutex_lock(&fifo->mutex);
+	my_turn = (fifo->count > 0 && fifo->array[0] == coder);
+	pthread_mutex_unlock(&fifo->mutex);
+	return (my_turn);
 }
 
 int	lock_dongle_fifo(t_coder *coder, t_dongle *dongle)
@@ -54,7 +52,7 @@ int	lock_dongle_fifo(t_coder *coder, t_dongle *dongle)
 	fifo_push(&dongle->fifo, coder);
 	while (is_running(coder->all))
 	{
-		if (fifo_front(&dongle->fifo) == coder)
+		if (is_my_turn_fifo(&dongle->fifo, coder))
 		{
 			pthread_mutex_lock(&dongle->mutex);
 			if (can_take_dongle(coder->all, dongle))

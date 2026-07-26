@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 16:38:48 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/27 00:21:51 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/27 00:34:37 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,10 @@ typedef struct s_heap
 	int					capacity;
 	pthread_mutex_t		mutex;
 }						t_heap;
-
 typedef struct s_fifo
 {
 	t_coder				**array;
-	int					head;
-	int					tail;
-	int					size;
-	int					capacity;
+	int					count;
 	pthread_mutex_t		mutex;
 }						t_fifo;
 
@@ -125,7 +121,7 @@ long int				get_time(t_all *all);
 
 int						init_all(t_all *all);
 int						init_dongles(t_all *all);
-int						init_fifo(t_fifo *fifo, int capacity);
+int						init_fifo(t_fifo *fifo);
 int						init_heap(t_heap *heap);
 int						init_coders(t_all *all);
 

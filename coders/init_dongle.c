@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:29:23 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/27 00:17:47 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/27 00:35:28 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ static int	set_memory(t_all *all)
 	return (1);
 }
 
-static int	init_dongle(t_dongle *dongle, int nb_coders)
+static int	init_dongle(t_dongle *dongle)
 {
 	dongle->available_at = 0;
 	if (pthread_mutex_init(&dongle->mutex, NULL))
 		return (0);
-	if (!init_fifo(&dongle->fifo, nb_coders))
+	if (!init_fifo(&dongle->fifo))
 	{
 		pthread_mutex_destroy(&dongle->mutex);
 		return (0);
@@ -54,7 +54,7 @@ int	init_dongles(t_all *all)
 	}
 	while (i < all->params.nb_coders)
 	{
-		if (!init_dongle(&all->dongles[i], all->params.nb_coders))
+		if (!init_dongle(&all->dongles[i]))
 		{
 			destroy_all(all);
 		}

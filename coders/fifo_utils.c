@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fifo.c                                             :+:      :+:    :+:   */
+/*   fifo_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/07 17:35:09 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/07 17:35:15 by nyramana         ###   ########.fr       */
+/*   Created: 2026/07/27 00:36:11 by nyramana          #+#    #+#             */
+/*   Updated: 2026/07/27 00:36:38 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-int	init_fifo(t_fifo *fifo, int capacity)
+int	init_fifo(t_fifo *fifo)
 {
-	fifo->array = malloc(sizeof(t_coder *) * capacity);
+	fifo->array = malloc(sizeof(t_coder *) * 2);
 	if (!fifo->array)
 		return (0);
-	fifo->head = 0;
-	fifo->tail = 0;
-	fifo->size = 0;
-	fifo->capacity = capacity;
+	fifo->count = 0;
 	if (pthread_mutex_init(&fifo->mutex, NULL))
 	{
 		free(fifo->array);
