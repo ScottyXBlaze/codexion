@@ -6,19 +6,19 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:37:43 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/18 15:59:38 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/27 00:21:38 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-int	init_heap(t_heap *heap, int capacity)
+int	init_heap(t_heap *heap)
 {
-	heap->array = malloc(sizeof(t_coder *) * capacity);
+	heap->array = malloc(sizeof(t_coder *) * 2);
 	if (!heap->array)
 		return (0);
 	heap->size = 0;
-	heap->capacity = capacity;
+	heap->capacity = 2;
 	if (pthread_mutex_init(&heap->mutex, NULL))
 	{
 		free(heap->array);
@@ -33,42 +33,14 @@ void	destroy_heap(t_heap *heap)
 	pthread_mutex_destroy(&heap->mutex);
 }
 
-int	lock_dongle_edf(t_coder *coder, t_dongle *dongle)
+int	is_my_turn_edf(t_heap *edf, t_coder *coder)
 {
-	long int	remaining_cooldown;
+	int	my_turn;
 
-	heap_push(&dongle->edf, coder);
-	while (is_running(coder->all))
-	{
-		if (heap_peek(&dongle->edf) == coder)
-		{
-			pthread_mutex_lock(&dongle->mutex);
-			if (can_take_dongle(coder->all, dongle))
-			{
-				heap_pop(&dongle->edf);
-				return (1);
-			}
-			remaining_cooldown = dongle->available_at - get_time(coder->all);
-			pthread_mutex_unlock(&dongle->mutex);
-			if (remaining_cooldown > 0)
-			{
-				ft_sleep(remaining_cooldown, coder->all);
-				continue ;
-			}
-		}
-		usleep(500);
-	}
-	return (0);
-}
-
-t_coder	*heap_peek(t_heap *heap)
-{
-	t_coder	*coder;
-
-	pthread_mutex_lock(&heap->mutex);
-	coder = NULL;
-	if (heap->size > 0)
-		coder = heap->array[0];
-	pthread_mutex_unlock(&heap->mutex);
-	return (coder);
+	my_turn = 0;
+	pthread_mutex_lock(&edf->mutex);
+	if (edf->size > 0 && edf->array[0] == coder)
+		my_turn = 1;
+	pthread_mutex_unlock(&edf->mutex);
+	return (my_turn);
 }

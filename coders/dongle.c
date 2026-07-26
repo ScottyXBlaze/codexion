@@ -6,13 +6,13 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 21:46:57 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/26 23:33:16 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/27 00:21:15 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-void	unlock_dongle(t_all *all, t_dongle *dongle);
+void		unlock_dongle(t_all *all, t_dongle *dongle);
 static void	destroy_dongle(t_dongle *dongle);
 
 int	can_take_dongle(t_all *all, t_dongle *dongle)
@@ -26,7 +26,6 @@ int	lock_dongle(t_coder *coder, t_dongle *dongle)
 		return (lock_dongle_fifo(coder, dongle));
 	return (lock_dongle_edf(coder, dongle));
 }
-
 
 int	destroy_dongles(t_all *all)
 {
@@ -48,7 +47,6 @@ void	unlock_dongle(t_all *all, t_dongle *dongle)
 	pthread_mutex_unlock(&dongle->mutex);
 }
 
-
 static void	destroy_dongle(t_dongle *dongle)
 {
 	pthread_mutex_destroy(&dongle->mutex);
@@ -57,4 +55,3 @@ static void	destroy_dongle(t_dongle *dongle)
 	pthread_mutex_destroy(&dongle->edf.mutex);
 	free(dongle->edf.array);
 }
-

@@ -6,110 +6,104 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 21:55:58 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/18 16:00:42 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/27 00:22:31 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
+static long int	get_coder_deadline(t_coder *coder)
+{
+	long int	last;
+
+	pthread_mutex_lock(&coder->mutex);
+	last = coder->last_compile;
+	pthread_mutex_unlock(&coder->mutex);
+	return (last + coder->all->params.burnout);
+}
+
 static int	is_higher_priority(t_coder *a, t_coder *b)
 {
 	long int	a_deadline;
 	long int	b_deadline;
-	long int	last;
 
-	pthread_mutex_lock(&a->mutex);
-	last = a->last_compile;
-	pthread_mutex_unlock(&a->mutex);
-	a_deadline = last + a->all->params.burnout;
-	pthread_mutex_lock(&b->mutex);
-	last = b->last_compile;
-	pthread_mutex_unlock(&b->mutex);
-	b_deadline = last + b->all->params.burnout;
+	a_deadline = get_coder_deadline(a);
+	b_deadline = get_coder_deadline(b);
 	if (a_deadline != b_deadline)
 		return (a_deadline < b_deadline);
 	return (a->id < b->id);
 }
 
-static int	get_smallest_child(t_heap *heap, int index)
+static void	edf_push(t_heap *edf, t_coder *coder)
 {
-	int	left;
-	int	right;
-	int	smallest;
-
-	left = (index * 2) + 1;
-	right = (index * 2) + 2;
-	smallest = index;
-	if (left < heap->size && is_higher_priority(heap->array[left],
-			heap->array[smallest]))
-		smallest = left;
-	if (right < heap->size && is_higher_priority(heap->array[right],
-			heap->array[smallest]))
-		smallest = right;
-	return (smallest);
-}
-
-void	heap_push(t_heap *heap, t_coder *coder)
-{
-	int	index;
-	int	parent;
-
-	pthread_mutex_lock(&heap->mutex);
-	if (heap->size >= heap->capacity)
-	{
-		pthread_mutex_unlock(&heap->mutex);
-		return ;
-	}
-	index = heap->size;
-	heap->array[index] = coder;
-	heap->size++;
-	while (index > 0)
-	{
-		parent = (index - 1) / 2;
-		if (!is_higher_priority(heap->array[index], heap->array[parent]))
-			break ;
-		coder = heap->array[index];
-		heap->array[index] = heap->array[parent];
-		heap->array[parent] = coder;
-		index = parent;
-	}
-	pthread_mutex_unlock(&heap->mutex);
-}
-
-static void	sift_down(t_heap *heap)
-{
-	int		index;
-	int		smallest;
 	t_coder	*tmp;
 
-	index = 0;
-	while (1)
+	pthread_mutex_lock(&edf->mutex);
+	if (edf->size >= edf->capacity)
 	{
-		smallest = get_smallest_child(heap, index);
-		if (smallest == index)
-			break ;
-		tmp = heap->array[index];
-		heap->array[index] = heap->array[smallest];
-		heap->array[smallest] = tmp;
-		index = smallest;
+		pthread_mutex_unlock(&edf->mutex);
+		return ;
 	}
+	edf->array[edf->size] = coder;
+	edf->size++;
+	if (edf->size == 2)
+	{
+		if (is_higher_priority(edf->array[1], edf->array[0]))
+		{
+			tmp = edf->array[0];
+			edf->array[0] = edf->array[1];
+			edf->array[1] = tmp;
+		}
+	}
+	pthread_mutex_unlock(&edf->mutex);
 }
 
-void	heap_pop(t_heap *heap)
+static void	edf_remove(t_heap *edf, t_coder *coder)
 {
-	pthread_mutex_lock(&heap->mutex);
-	if (heap->size <= 0)
+	pthread_mutex_lock(&edf->mutex);
+	if (edf->size == 0)
 	{
-		pthread_mutex_unlock(&heap->mutex);
+		pthread_mutex_unlock(&edf->mutex);
 		return ;
 	}
-	heap->size--;
-	if (heap->size == 0)
+	if (edf->array[0] == coder)
 	{
-		pthread_mutex_unlock(&heap->mutex);
-		return ;
+		edf->array[0] = edf->array[1];
+		edf->array[1] = NULL;
+		edf->size--;
 	}
-	heap->array[0] = heap->array[heap->size];
-	sift_down(heap);
-	pthread_mutex_unlock(&heap->mutex);
+	else if (edf->size == 2 && edf->array[1] == coder)
+	{
+		edf->array[1] = NULL;
+		edf->size--;
+	}
+	pthread_mutex_unlock(&edf->mutex);
+}
+
+int	lock_dongle_edf(t_coder *coder, t_dongle *dongle)
+{
+	long int	cooldown_remaining;
+
+	edf_push(&dongle->edf, coder);
+	while (coder->all->running)
+	{
+		if (is_my_turn_edf(&dongle->edf, coder))
+		{
+			pthread_mutex_lock(&dongle->mutex);
+			if (can_take_dongle(coder->all, dongle))
+			{
+				edf_remove(&dongle->edf, coder);
+				return (1);
+			}
+			cooldown_remaining = dongle->available_at - get_time(coder->all);
+			pthread_mutex_unlock(&dongle->mutex);
+			if (cooldown_remaining > 0)
+			{
+				ft_sleep(cooldown_remaining, coder->all);
+				continue ;
+			}
+		}
+		usleep(200);
+	}
+	return (0);
 }

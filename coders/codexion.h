@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 16:38:48 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/26 23:33:58 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/27 00:21:51 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ long int				get_time(t_all *all);
 int						init_all(t_all *all);
 int						init_dongles(t_all *all);
 int						init_fifo(t_fifo *fifo, int capacity);
-int						init_heap(t_heap *heap, int capacity);
+int						init_heap(t_heap *heap);
 int						init_coders(t_all *all);
 
 int						destroy_dongles(t_all *all);
@@ -151,8 +151,5 @@ void					coder_compile(t_coder *coder);
 void					coder_debug(t_coder *coder);
 void					coder_refactor(t_coder *coder);
 
-void					heap_push(t_heap *heap, t_coder *coder);
-t_coder					*heap_peek(t_heap *heap);
-void					heap_pop(t_heap *heap);
-
+int						is_my_turn_edf(t_heap *edf, t_coder *coder);
 #endif

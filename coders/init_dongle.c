@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_all.c                                         :+:      :+:    :+:   */
+/*   init_dongle.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:29:23 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/07 17:39:33 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/27 00:17:47 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	init_dongle(t_dongle *dongle, int nb_coders)
 		pthread_mutex_destroy(&dongle->mutex);
 		return (0);
 	}
-	if (!init_heap(&dongle->edf, nb_coders))
+	if (!init_heap(&dongle->edf))
 	{
 		pthread_mutex_destroy(&dongle->fifo.mutex);
 		free(dongle->fifo.array);
