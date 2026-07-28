@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 16:38:48 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/28 22:05:17 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:32:04 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,13 @@ typedef struct s_heap
 	pthread_mutex_t		mutex;
 }						t_heap;
 
+typedef struct s_heap2
+{
+	t_coder				**array;
+	int					count;
+	pthread_mutex_t		mutex;
+}						t_heap2;
+
 typedef struct s_fifo
 {
 	t_coder				**array;
@@ -47,6 +54,7 @@ typedef struct s_dongle
 	long int			available_at;
 	t_heap				edf;
 	t_fifo				fifo;
+	t_heap2				scheduler;
 	pthread_cond_t		cond;
 }						t_dongle;
 
@@ -149,4 +157,8 @@ void					coder_refactor(t_coder *coder);
 int						is_my_turn_edf(t_heap *edf, t_coder *coder);
 int						is_higher_priority(t_coder *a, t_coder *b);
 
+
+int	lock_dongle_orig(t_coder *coder, t_dongle *dongle);
+
+int	init_scheduler(t_heap2 *heap);
 #endif

@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 21:55:58 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/28 22:09:13 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:21:15 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,6 @@ static void	edf_push(t_heap *edf, t_coder *coder)
 	t_coder	*tmp;
 
 	pthread_mutex_lock(&edf->mutex);
-	if (edf->size >= edf->capacity)
-	{
-		pthread_mutex_unlock(&edf->mutex);
-		return ;
-	}
 	edf->array[edf->size] = coder;
 	edf->size++;
 	if (edf->size == 2)

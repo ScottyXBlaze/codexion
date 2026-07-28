@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:29:23 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/28 19:09:27 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:32:31 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ static int	init_dongle(t_dongle *dongle)
 	if (!init_fifo(&dongle->fifo))
 	{
 		pthread_mutex_destroy(&dongle->mutex);
+		return (0);
+	}
+	if (!init_scheduler(&dongle->scheduler))
+	{
 		return (0);
 	}
 	if (!init_heap(&dongle->edf))
