@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:29:23 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/27 00:35:28 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 19:09:27 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ static int	init_dongle(t_dongle *dongle)
 {
 	dongle->available_at = 0;
 	if (pthread_mutex_init(&dongle->mutex, NULL))
+		return (0);
+	if (pthread_cond_init(&dongle->cond, NULL))
 		return (0);
 	if (!init_fifo(&dongle->fifo))
 	{

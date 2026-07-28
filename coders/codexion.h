@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 16:38:48 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/28 19:05:55 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 19:08:52 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_dongle
 	long int			available_at;
 	t_heap				edf;
 	t_fifo				fifo;
+	pthread_cond_t		cond;
 }						t_dongle;
 
 typedef enum s_scheduler

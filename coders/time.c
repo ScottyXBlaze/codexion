@@ -48,8 +48,16 @@ int	is_running(t_all *all)
 
 void	stop_simulation(t_all *all)
 {
+	int	i;
+
 	pthread_mutex_lock(&all->running_mutex);
 	if (all->running)
 		all->running = 0;
 	pthread_mutex_unlock(&all->running_mutex);
+	i = 0;
+	while (i < all->params.nb_coders)
+	{
+		pthread_cond_broadcast(&all->dongles[i].cond);
+		i++;
+	}
 }

@@ -85,14 +85,15 @@ int	lock_dongle_edf(t_coder *coder, t_dongle *dongle)
 	long int	cooldown_remaining;
 
 	edf_push(&dongle->edf, coder);
+	pthread_mutex_lock(&dongle->mutex);
 	while (coder->all->running)
 	{
 		if (is_my_turn_edf(&dongle->edf, coder))
 		{
-			pthread_mutex_lock(&dongle->mutex);
 			if (can_take_dongle(coder->all, dongle))
 			{
 				edf_remove(&dongle->edf, coder);
+				pthread_mutex_unlock(&dongle->mutex);
 				return (1);
 			}
 			cooldown_remaining = dongle->available_at - get_time(coder->all);
@@ -100,10 +101,13 @@ int	lock_dongle_edf(t_coder *coder, t_dongle *dongle)
 			if (cooldown_remaining > 0)
 			{
 				ft_sleep(cooldown_remaining, coder->all);
+				pthread_mutex_lock(&dongle->mutex);
 				continue ;
 			}
+			pthread_mutex_lock(&dongle->mutex);
 		}
-		usleep(200);
+		pthread_cond_wait(&dongle->cond, &dongle->mutex);
 	}
+	pthread_mutex_unlock(&dongle->mutex);
 	return (0);
 }

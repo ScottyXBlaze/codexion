@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/27 00:36:57 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/27 00:38:04 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 19:12:14 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,15 @@ int	lock_dongle_fifo(t_coder *coder, t_dongle *dongle)
 	long int	remaining_cooldown;
 
 	fifo_push(&dongle->fifo, coder);
+	pthread_mutex_lock(&dongle->mutex);
 	while (is_running(coder->all))
 	{
 		if (is_my_turn_fifo(&dongle->fifo, coder))
 		{
-			pthread_mutex_lock(&dongle->mutex);
 			if (can_take_dongle(coder->all, dongle))
 			{
 				fifo_pop(&dongle->fifo);
+				pthread_mutex_unlock(&dongle->mutex);
 				return (1);
 			}
 			remaining_cooldown = dongle->available_at - get_time(coder->all);
@@ -65,10 +66,13 @@ int	lock_dongle_fifo(t_coder *coder, t_dongle *dongle)
 			if (remaining_cooldown > 0)
 			{
 				ft_sleep(remaining_cooldown, coder->all);
+				pthread_mutex_lock(&dongle->mutex);
 				continue ;
 			}
+			pthread_mutex_lock(&dongle->mutex);
 		}
-		usleep(500);
+		pthread_cond_wait(&dongle->cond, &dongle->mutex);
 	}
+	pthread_mutex_unlock(&dongle->mutex);
 	return (0);
 }

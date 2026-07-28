@@ -45,11 +45,13 @@ void	unlock_dongle(t_all *all, t_dongle *dongle)
 {
 	dongle->available_at = get_time(all) + all->params.dongle_cooldown;
 	pthread_mutex_unlock(&dongle->mutex);
+	pthread_cond_broadcast(&dongle->cond);
 }
 
 static void	destroy_dongle(t_dongle *dongle)
 {
 	pthread_mutex_destroy(&dongle->mutex);
+	pthread_cond_destroy(&dongle->cond);
 	pthread_mutex_destroy(&dongle->fifo.mutex);
 	free(dongle->fifo.array);
 	pthread_mutex_destroy(&dongle->edf.mutex);
