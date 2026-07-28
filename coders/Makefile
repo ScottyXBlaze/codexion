@@ -3,8 +3,6 @@ NAME	=	codexion
 SRC		=	codexion.c \
 			validation.c \
 			parser.c \
-			edf_utils.c \
-			fifo_utils.c \
 			init_all.c \
 			init_dongle.c \
 			dongle.c \
@@ -13,8 +11,6 @@ SRC		=	codexion.c \
 			destroy_all.c \
 			monitor.c \
 			coder_utils.c \
-			fifo.c \
-			edf.c \
 			coder_state.c \
 			scheduler.c \
 

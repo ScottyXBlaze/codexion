@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 16:38:48 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/28 22:32:04 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:40:58 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,6 @@
 
 typedef struct s_coder	t_coder;
 
-typedef struct s_heap
-{
-	t_coder				**array;
-	int					size;
-	int					capacity;
-	pthread_mutex_t		mutex;
-}						t_heap;
-
 typedef struct s_heap2
 {
 	t_coder				**array;
@@ -41,19 +33,10 @@ typedef struct s_heap2
 	pthread_mutex_t		mutex;
 }						t_heap2;
 
-typedef struct s_fifo
-{
-	t_coder				**array;
-	int					count;
-	pthread_mutex_t		mutex;
-}						t_fifo;
-
 typedef struct s_dongle
 {
 	pthread_mutex_t		mutex;
 	long int			available_at;
-	t_heap				edf;
-	t_fifo				fifo;
 	t_heap2				scheduler;
 	pthread_cond_t		cond;
 }						t_dongle;
@@ -128,15 +111,12 @@ long int				get_time(t_all *all);
 
 int						init_all(t_all *all);
 int						init_dongles(t_all *all);
-int						init_fifo(t_fifo *fifo);
-int						init_heap(t_heap *heap);
 int						init_coders(t_all *all);
+
+int						destroy_coders(t_coder *coders);
 
 int						destroy_dongles(t_all *all);
 void					destroy_all(t_all *all);
-void					destroy_fifo(t_fifo *fifo);
-void					destroy_heap(t_heap *heap);
-int						destroy_coders(t_coder *coders);
 
 void					*coder_loop(void *args);
 void					*monitor_loop(void *args);
@@ -154,11 +134,9 @@ void					coder_compile(t_coder *coder);
 void					coder_debug(t_coder *coder);
 void					coder_refactor(t_coder *coder);
 
-int						is_my_turn_edf(t_heap *edf, t_coder *coder);
 int						is_higher_priority(t_coder *a, t_coder *b);
 
+int						lock_dongle_orig(t_coder *coder, t_dongle *dongle);
 
-int	lock_dongle_orig(t_coder *coder, t_dongle *dongle);
-
-int	init_scheduler(t_heap2 *heap);
+int						init_scheduler(t_heap2 *heap);
 #endif

@@ -6,11 +6,33 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/28 22:14:42 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/28 22:29:48 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:38:32 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
+
+static long int	get_coder_deadline(t_coder *coder)
+{
+	long int	last;
+
+	pthread_mutex_lock(&coder->mutex);
+	last = coder->last_compile;
+	pthread_mutex_unlock(&coder->mutex);
+	return (last + coder->all->params.burnout);
+}
+
+int	is_higher_priority(t_coder *a, t_coder *b)
+{
+	long int	a_deadline;
+	long int	b_deadline;
+
+	a_deadline = get_coder_deadline(a);
+	b_deadline = get_coder_deadline(b);
+	if (a_deadline != b_deadline)
+		return (a_deadline < b_deadline);
+	return (a->id < b->id);
+}
 
 int	init_scheduler(t_heap2 *heap)
 {

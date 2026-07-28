@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 21:46:57 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/28 22:28:30 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:40:02 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,7 @@ int	can_take_dongle(t_all *all, t_dongle *dongle)
 
 int	lock_dongle(t_coder *coder, t_dongle *dongle)
 {
-	return lock_dongle_orig(coder, dongle);
-	// if (coder->all->params.scheduler == FIFO)
-	// 	return (lock_dongle_fifo(coder, dongle));
-	// return (lock_dongle_edf(coder, dongle));
+	return (lock_dongle_orig(coder, dongle));
 }
 
 int	destroy_dongles(t_all *all)
@@ -53,8 +50,4 @@ static void	destroy_dongle(t_dongle *dongle)
 {
 	pthread_mutex_destroy(&dongle->mutex);
 	pthread_cond_destroy(&dongle->cond);
-	pthread_mutex_destroy(&dongle->fifo.mutex);
-	free(dongle->fifo.array);
-	pthread_mutex_destroy(&dongle->edf.mutex);
-	free(dongle->edf.array);
 }
