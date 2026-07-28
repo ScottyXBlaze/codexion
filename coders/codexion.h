@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 16:38:48 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/27 00:34:37 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 19:05:55 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 
 # ifndef MAX_CODER
 #  define MAX_CODER 500
-
 # endif
 
 typedef struct s_coder	t_coder;
@@ -34,6 +33,7 @@ typedef struct s_heap
 	int					capacity;
 	pthread_mutex_t		mutex;
 }						t_heap;
+
 typedef struct s_fifo
 {
 	t_coder				**array;
@@ -84,8 +84,6 @@ typedef struct s_all
 	pthread_mutex_t		running_mutex;
 	pthread_mutex_t		message_mutex;
 
-	pthread_mutex_t		start_mutex;
-	pthread_cond_t		start_cond;
 	pthread_t			monitor;
 	t_dongle			*dongles;
 	t_coder				*coders;

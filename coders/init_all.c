@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:40:53 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/26 22:51:25 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 19:06:41 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ static int	init_mutexes(t_all *all);
 
 int	init_all(t_all *all)
 {
-	init_mutexes(all);
+	if (!init_mutexes(all))
+		return (0);
 	all->start_time = get_time(all);
 	pthread_mutex_lock(&all->running_mutex);
 	all->running = 1;
@@ -48,16 +49,6 @@ static int	init_mutexes(t_all *all)
 		return (0);
 	}
 	if (pthread_mutex_init(&all->running_mutex, NULL))
-	{
-		destroy_all(all);
-		return (0);
-	}
-	if (pthread_mutex_init(&all->start_mutex, NULL))
-	{
-		destroy_all(all);
-		return (0);
-	}
-	if (pthread_cond_init(&all->start_cond, NULL))
 	{
 		destroy_all(all);
 		return (0);
