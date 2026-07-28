@@ -6,55 +6,13 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/28 22:14:42 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/28 22:52:38 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:56:21 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static long int	get_coder_deadline(t_coder *coder)
-{
-	long int	last;
-
-	pthread_mutex_lock(&coder->mutex);
-	last = coder->last_compile;
-	pthread_mutex_unlock(&coder->mutex);
-	return (last + coder->all->params.burnout);
-}
-
-int	is_higher_priority(t_coder *a, t_coder *b)
-{
-	long int	a_deadline;
-	long int	b_deadline;
-
-	a_deadline = get_coder_deadline(a);
-	b_deadline = get_coder_deadline(b);
-	if (a_deadline != b_deadline)
-		return (a_deadline < b_deadline);
-	return (a->id < b->id);
-}
-
-int	init_scheduler(t_heap *heap)
-{
-	heap->array = malloc(sizeof(t_coder *) * 2);
-	if (!heap->array)
-		return (0);
-	heap->count = 0;
-	if (pthread_mutex_init(&heap->mutex, NULL))
-	{
-		free(heap->array);
-		return (0);
-	}
-	return (1);
-}
-
-void	destroy_scheduler(t_heap *fifo)
-{
-	free(fifo->array);
-	pthread_mutex_destroy(&fifo->mutex);
-}
-
-void	scheduler_push(t_heap *scheduler, t_coder *coder)
+static void	scheduler_push(t_heap *scheduler, t_coder *coder)
 {
 	t_coder	*tmp;
 
@@ -83,7 +41,7 @@ void	scheduler_push(t_heap *scheduler, t_coder *coder)
 	pthread_mutex_unlock(&scheduler->mutex);
 }
 
-void	scheduler_pop(t_heap *scheduler)
+static void	scheduler_pop(t_heap *scheduler)
 {
 	pthread_mutex_lock(&scheduler->mutex);
 	if (scheduler->count > 0)
@@ -95,7 +53,7 @@ void	scheduler_pop(t_heap *scheduler)
 	pthread_mutex_unlock(&scheduler->mutex);
 }
 
-int	is_my_turn(t_heap *scheduler, t_coder *coder)
+static int	is_my_turn(t_heap *scheduler, t_coder *coder)
 {
 	int	my_turn;
 

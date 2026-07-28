@@ -13,6 +13,7 @@ SRC		=	codexion.c \
 			coder_utils.c \
 			coder_state.c \
 			scheduler.c \
+			scheduler_utils.c \
 
 
 OBJS	=	$(SRC:.c=.o)
