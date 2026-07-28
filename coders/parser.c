@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 16:50:20 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/26 23:33:17 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:03:20 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static int			validate_args(int argc, char **argv);
 static t_scheduler	scheduler(char *str);
 static void			print_help(void);
+static int			post_handler(t_all *all);
 
 int	parsers(int argc, char **argv, t_all *all)
 {
@@ -28,16 +29,8 @@ int	parsers(int argc, char **argv, t_all *all)
 	all->params.compiles_required = atoi(argv[6]);
 	all->params.dongle_cooldown = atoi(argv[7]);
 	all->params.scheduler = scheduler(argv[8]);
-	if (all->params.nb_coders == 0)
-	{
-		printf("[ERROR] Not enough coder\n");
-		return (print_help(), 0);
-	}
-	if (all->params.nb_coders > MAX_CODER)
-	{
-		printf("[ERROR] Too many coders\n");
-		return (print_help(), 0);
-	}
+	if (!post_handler(all))
+		return (0);
 	return (1);
 }
 
@@ -84,4 +77,24 @@ static void	print_help(void)
 	printf("[USAGE] ./codexion number_of_coders time_to_burnout ");
 	printf("time_to_compile time_to_debug time_to_refactor number_of_");
 	printf("compiles_required dongle_cooldown scheduler\n");
+}
+
+static int	post_handler(t_all *all)
+{
+	if (all->params.nb_coders == 0)
+	{
+		printf("[ERROR] Not enough coder\n");
+		return (print_help(), 0);
+	}
+	if (all->params.nb_coders > MAX_CODER)
+	{
+		printf("[ERROR] Too many coders\n");
+		return (print_help(), 0);
+	}
+	if (all->params.compiles_required == 0)
+	{
+		printf("[WARNI] 'number_of_compiles_required' is 0\n");
+		return (0);
+	}
+	return (1);
 }
