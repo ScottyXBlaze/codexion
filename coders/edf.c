@@ -6,11 +6,12 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 21:55:58 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/28 22:07:22 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:09:13 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
+
 static void	edf_push(t_heap *edf, t_coder *coder)
 {
 	t_coder	*tmp;
@@ -68,7 +69,7 @@ int	lock_dongle_edf(t_coder *coder, t_dongle *dongle)
 		if (is_my_turn_edf(&dongle->edf, coder))
 		{
 			if (can_take_dongle(coder->all, dongle))
-				return (edf_remove(&dongle->edf, coder),1);
+				return (edf_remove(&dongle->edf, coder), 1);
 			cooldown_remaining = dongle->available_at - get_time(coder->all);
 			pthread_mutex_unlock(&dongle->mutex);
 			if (cooldown_remaining > 0)

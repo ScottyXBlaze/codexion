@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/27 00:36:57 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/28 19:12:14 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:08:50 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,7 @@ int	lock_dongle_fifo(t_coder *coder, t_dongle *dongle)
 		if (is_my_turn_fifo(&dongle->fifo, coder))
 		{
 			if (can_take_dongle(coder->all, dongle))
-			{
-				fifo_pop(&dongle->fifo);
-				return (1);
-			}
+				return (fifo_pop(&dongle->fifo), 1);
 			remaining_cooldown = dongle->available_at - get_time(coder->all);
 			pthread_mutex_unlock(&dongle->mutex);
 			if (remaining_cooldown > 0)
