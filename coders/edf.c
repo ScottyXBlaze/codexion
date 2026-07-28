@@ -6,34 +6,11 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 21:55:58 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/27 00:22:31 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:07:22 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
-
-static long int	get_coder_deadline(t_coder *coder)
-{
-	long int	last;
-
-	pthread_mutex_lock(&coder->mutex);
-	last = coder->last_compile;
-	pthread_mutex_unlock(&coder->mutex);
-	return (last + coder->all->params.burnout);
-}
-
-static int	is_higher_priority(t_coder *a, t_coder *b)
-{
-	long int	a_deadline;
-	long int	b_deadline;
-
-	a_deadline = get_coder_deadline(a);
-	b_deadline = get_coder_deadline(b);
-	if (a_deadline != b_deadline)
-		return (a_deadline < b_deadline);
-	return (a->id < b->id);
-}
-
 static void	edf_push(t_heap *edf, t_coder *coder)
 {
 	t_coder	*tmp;
@@ -91,10 +68,7 @@ int	lock_dongle_edf(t_coder *coder, t_dongle *dongle)
 		if (is_my_turn_edf(&dongle->edf, coder))
 		{
 			if (can_take_dongle(coder->all, dongle))
-			{
-				edf_remove(&dongle->edf, coder);
-				return (1);
-			}
+				return (edf_remove(&dongle->edf, coder),1);
 			cooldown_remaining = dongle->available_at - get_time(coder->all);
 			pthread_mutex_unlock(&dongle->mutex);
 			if (cooldown_remaining > 0)

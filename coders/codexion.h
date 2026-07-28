@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 16:38:48 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/28 19:08:52 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:05:17 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,4 +147,6 @@ void					coder_debug(t_coder *coder);
 void					coder_refactor(t_coder *coder);
 
 int						is_my_turn_edf(t_heap *edf, t_coder *coder);
+int						is_higher_priority(t_coder *a, t_coder *b);
+
 #endif

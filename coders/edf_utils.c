@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:37:43 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/27 00:21:38 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:04:04 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,26 @@ int	is_my_turn_edf(t_heap *edf, t_coder *coder)
 		my_turn = 1;
 	pthread_mutex_unlock(&edf->mutex);
 	return (my_turn);
+}
+
+static long int	get_coder_deadline(t_coder *coder)
+{
+	long int	last;
+
+	pthread_mutex_lock(&coder->mutex);
+	last = coder->last_compile;
+	pthread_mutex_unlock(&coder->mutex);
+	return (last + coder->all->params.burnout);
+}
+
+int	is_higher_priority(t_coder *a, t_coder *b)
+{
+	long int	a_deadline;
+	long int	b_deadline;
+
+	a_deadline = get_coder_deadline(a);
+	b_deadline = get_coder_deadline(b);
+	if (a_deadline != b_deadline)
+		return (a_deadline < b_deadline);
+	return (a->id < b->id);
 }
