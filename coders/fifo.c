@@ -58,7 +58,6 @@ int	lock_dongle_fifo(t_coder *coder, t_dongle *dongle)
 			if (can_take_dongle(coder->all, dongle))
 			{
 				fifo_pop(&dongle->fifo);
-				pthread_mutex_unlock(&dongle->mutex);
 				return (1);
 			}
 			remaining_cooldown = dongle->available_at - get_time(coder->all);

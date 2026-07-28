@@ -93,7 +93,6 @@ int	lock_dongle_edf(t_coder *coder, t_dongle *dongle)
 			if (can_take_dongle(coder->all, dongle))
 			{
 				edf_remove(&dongle->edf, coder);
-				pthread_mutex_unlock(&dongle->mutex);
 				return (1);
 			}
 			cooldown_remaining = dongle->available_at - get_time(coder->all);
