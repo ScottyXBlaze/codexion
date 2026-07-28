@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/28 22:14:42 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/28 22:38:32 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 22:52:38 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	is_higher_priority(t_coder *a, t_coder *b)
 	return (a->id < b->id);
 }
 
-int	init_scheduler(t_heap2 *heap)
+int	init_scheduler(t_heap *heap)
 {
 	heap->array = malloc(sizeof(t_coder *) * 2);
 	if (!heap->array)
@@ -48,13 +48,13 @@ int	init_scheduler(t_heap2 *heap)
 	return (1);
 }
 
-void	destroy_scheduler(t_heap2 *fifo)
+void	destroy_scheduler(t_heap *fifo)
 {
 	free(fifo->array);
 	pthread_mutex_destroy(&fifo->mutex);
 }
 
-void	scheduler_push(t_heap2 *scheduler, t_coder *coder)
+void	scheduler_push(t_heap *scheduler, t_coder *coder)
 {
 	t_coder	*tmp;
 
@@ -83,7 +83,7 @@ void	scheduler_push(t_heap2 *scheduler, t_coder *coder)
 	pthread_mutex_unlock(&scheduler->mutex);
 }
 
-void	scheduler_pop(t_heap2 *scheduler)
+void	scheduler_pop(t_heap *scheduler)
 {
 	pthread_mutex_lock(&scheduler->mutex);
 	if (scheduler->count > 0)
@@ -95,7 +95,7 @@ void	scheduler_pop(t_heap2 *scheduler)
 	pthread_mutex_unlock(&scheduler->mutex);
 }
 
-int	is_my_turn(t_heap2 *scheduler, t_coder *coder)
+int	is_my_turn(t_heap *scheduler, t_coder *coder)
 {
 	int	my_turn;
 
@@ -105,7 +105,7 @@ int	is_my_turn(t_heap2 *scheduler, t_coder *coder)
 	return (my_turn);
 }
 
-int	lock_dongle_orig(t_coder *coder, t_dongle *dongle)
+int	lock_dongle(t_coder *coder, t_dongle *dongle)
 {
 	long int	remaining_cooldown;
 
