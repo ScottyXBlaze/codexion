@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 17:44:58 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/26 23:33:57 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 14:26:42 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,7 @@ static void	run_loop(t_coder *coder)
 static void	wait_running(t_coder *coder)
 {
 	while (!is_running(coder->all))
-	{
 		usleep(500);
-	}
 	pthread_mutex_lock(&coder->mutex);
 	coder->last_compile = get_time(coder->all);
 	pthread_mutex_unlock(&coder->mutex);

@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 23:39:22 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/26 23:33:59 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 18:34:59 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void	coder_compile(t_coder *coder)
 {
-	print_state(coder, COMPILE);
-	ft_sleep(coder->all->params.compile, coder->all);
 	pthread_mutex_lock(&coder->mutex);
 	coder->compile_count++;
 	coder->last_compile = get_time(coder->all);
 	pthread_mutex_unlock(&coder->mutex);
+	print_state(coder, COMPILE);
+	ft_sleep(coder->all->params.compile, coder->all);
 }
 
 void	coder_debug(t_coder *coder)
