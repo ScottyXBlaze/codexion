@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 16:38:48 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/28 22:52:03 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/28 23:18:55 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ long int				get_time(t_all *all);
 int						init_all(t_all *all);
 int						init_dongles(t_all *all);
 int						init_coders(t_all *all);
+int						init_scheduler(t_heap *heap);
 
 int						destroy_coders(t_coder *coders);
 
@@ -125,9 +126,6 @@ int						can_take_dongle(t_all *all, t_dongle *dongle);
 int						lock_dongle(t_coder *coder, t_dongle *dongle);
 void					unlock_dongle(t_all *all, t_dongle *dongle);
 
-int						lock_dongle_fifo(t_coder *coder, t_dongle *dongle);
-int						lock_dongle_edf(t_coder *coder, t_dongle *dongle);
-
 void					print_state(t_coder *coder, t_state state);
 
 void					coder_compile(t_coder *coder);
@@ -136,7 +134,4 @@ void					coder_refactor(t_coder *coder);
 
 int						is_higher_priority(t_coder *a, t_coder *b);
 
-int						lock_dongle(t_coder *coder, t_dongle *dongle);
-
-int						init_scheduler(t_heap *heap);
 #endif

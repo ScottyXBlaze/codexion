@@ -6,7 +6,7 @@
 /*   By: nyramana <nyramana@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/07 23:39:22 by nyramana          #+#    #+#             */
-/*   Updated: 2026/07/28 18:34:59 by nyramana         ###   ########.fr       */
+/*   Updated: 2026/07/29 07:56:01 by nyramana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ void	print_state(t_coder *coder, t_state state)
 {
 	long int	time;
 
-	pthread_mutex_lock(&coder->all->message_mutex);
 	time = get_time(coder->all);
+	pthread_mutex_lock(&coder->all->message_mutex);
 	if (is_running(coder->all) || state == BURNED_OUT)
 	{
 		if (state == TAKE_DONGLE)
