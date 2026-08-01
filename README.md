@@ -8,23 +8,23 @@
 
 **Codexion** is a multithread project that simulate the Dining-Philosopher Problem. It is a classic synchronization and concurrency problem that deals with resource sharing, deadlock, and starvation in systems where multiple processes require limited resources.
 
-The *Dining Philosopher Problem* involves 'n' philosophers sitting around a circular table. But here, we talk about *coder* sitting in a circular hub. Each coder alternate between three state: **Compiling**, **refactoring**, and **debuging**. To compile, A coder need two *dongles*, one on their left and one on their right. However, the number of dongle is equal to the number of coders, and each dongle is shared between two neighboring coders.
+The *Dining Philosopher Problem* involves 'n' philosophers sitting around a circular table. But here, we talk about *coder* sitting in a circular hub. Each coder alternates between three states: **Compiling**, **refactoring**, and **debugging**. To compile, A coder need two *dongles*, one on their left and one on their right. However, the number of dongle is equal to the number of coders, and each dongle is shared between two neighboring coders.
 
-### Constraint and conditions
+### Constraints and conditions
 
-- Every Coder needs two dongle to compile.
-- Every Coder need to pick up the dongle on the left and right.
+- Every coder needs two dongles to compile.
+- Every coder needs to pick up the dongle on the left and right.
 - Coder only compile when they have two dongles.
 - After compiling, coder must release their dongles and start debugging and finally refactoring before restarting again.
-- Each dongle has cooldown after being used.
+- Each dongle has a cooldown after being used.
 
 ### Goal
 
-The goal is to learn how these property can be handled with multithreading, mutexes, and cond. It teaches how to manage deadlock and starvation so that every thread can get their resources evenly without directly communicating to each other.
+The goal is to learn how these properties can be handled with multithreading, mutexes, and condition variables. It teaches how to manage deadlock and starvation so that every thread can get their resources evenly without directly communicating to each other.
 
 ### Brief Overview
 
-To run the program. You first need to compile the code with the **Makefile** then run the program. If you run the program. It will show some instruction to follow so that the program can run successfully.
+To run the program, you first need to compile the code with the **Makefile** then run the program. If you run the program, it will show some instructions to follow so that the program can run successfully.
 
 - Simple example:
 
@@ -57,13 +57,13 @@ To run the program. You first need to compile the code with the **Makefile** the
 
 ### Execution
 
-To run the program, We have to give it some parameters:
+To run the program, we have to give it some parameters:
 
 ```bash
 ./codexion number_of_coders time_to_burnout time_to_compile time_to_debug time_to_refactor number_of_compiles_required dongle_cooldown scheduler
 ```
 
-- **number_of_coders**: The number of coder in the table. The number of coder is also the same as the number of dongle.
+- **number_of_coders**: The number of coders in the table. The number of coders is also the same as the number of dongles.
 - **time_to_burnout**: The time for every coder to have before they burn out. This is taken while the coder don't do any actions. 
 - **time_to_compile**: The time for every coder to compile and hold the dongle.
 - **time_to_debug**: The time for every coder to debug. In this state, the coder doesn't hold dongle anymore.
@@ -115,7 +115,7 @@ Output:
 make # or make all
 ```
 
-- Removing artifact (.o file):
+- Removing artifacts (.o files):
 
 ```bash
 make clean
@@ -137,9 +137,9 @@ make re
 
 - **Peer learning**
 
-- [GeekForGeeks Dining-Philosopher](https://www.geeksforgeeks.org/operating-systems/dining-philosophers-problem/)
+- [GeeksforGeeks Dining-Philosopher](https://www.geeksforgeeks.org/operating-systems/dining-philosophers-problem/)
 
-- [GeekForGeeks Multithread](https://www.geeksforgeeks.org/c/multithreading-in-c/)
+- [GeeksforGeeks Multithread](https://www.geeksforgeeks.org/c/multithreading-in-c/)
 
 - [Introduction Thread C](https://www.youtube.com/watch?v=ldJ8WGZVXZk)
 
@@ -149,7 +149,7 @@ make re
 
 ### AI usage
 
-- AI was used to guide what was wrong with my approach on how I managed the coders and Teach me how to really use thread.
+- AI was used to guide what was wrong with my approach on how I managed the coders and teach me how to really use threads.
 
 ## Extras
 
@@ -157,28 +157,28 @@ make re
 
 #### Deadlock
 
-It is possible to have a deadlock if we don't handle it. A popular reason that a deadlock can happens is the *Coffman’s conditions*. All the conditions are:
+It is possible to have a deadlock if we don't handle it. A popular reason that a deadlock can happen is the *Coffman's conditions*. All the conditions are:
 
-- **Mutual Exclusion**: If multiple thread one resource. They cannot manipulate the resource at the same time.
-- **Hold and Wait**: If a process is having one resource and request another one but the other process hold the resource.
+- **Mutual Exclusion**: If multiple threads share one resource. They cannot manipulate the resource at the same time.
+- **Hold and Wait**: If a process is having one resource and requests another one but the other process holds the resource.
 - **No Preemption**: It means that a process cannot forcefully take a resource from another process.
-- **Circular wait**: It means that every processor is requesting a resource while holding one so no one can get two resource at the same time.
+- **Circular Wait**: It means that every process is requesting a resource while holding one so no one can get two resources at the same time.
 
-If every condition is true, Only then the deadlock can happen.
+If every condition is true, only then the deadlock can happen.
 
-And our project already has some of them like the **Mutual Exclusion**, **Hold and wait**, **No Preemption**. So to handle deadlock, We really need to handle the Circular wait. And to do that, the solution I implemented was simple. If there a multiple coders, we first check if his ID is even, if it is, we need to acquire the right dongle before the right one, and if it's ID is odd, We try to acquire the left dongle.
+And our project already has some of them like the **Mutual Exclusion**, **Hold and Wait**, **No Preemption**. So to handle deadlock, we really need to handle the Circular Wait. And to do that, the solution I implemented was simple. If there are multiple coders, we first check if his ID is even, if it is, we need to acquire the left dongle before the right one, and if its ID is odd, we try to acquire the right dongle first.
 
-- What happen if Every coder try to access their left dongle?
+- What happens if every coder tries to access their left dongle?
 
-A deadlock will happen because everyone hold the left dongle and try to access the right one, or the right dongle is held by the next coder. So every coder wait indefinitely.
+A deadlock will happen because everyone holds the left dongle and tries to access the right one, or the right dongle is held by the next coder. So every coder waits indefinitely.
 
-By using this method. Adjacent coder with differing parity will compete for the same initial dongle before either of them pick up a second one. And with that, at least one coder is guaranteed to fail picking up their first dongle and won't hold any resource while waiting.
+By using this method, adjacent coders with differing parity will compete for the same initial dongle before either of them picks up a second one. And with that, at least one coder is guaranteed to fail picking up their first dongle and won't hold any resource while waiting.
 
 #### Starvation
 
-To handle starvation, We used the scheduler. There are two scheduler which is the FIFO or "First In First Out" and edf or "Earliest Deadline First"
+To handle starvation, we used the scheduler. There are two schedulers which are the FIFO or "First In First Out" and EDF or "Earliest Deadline First".
 
-The two scheduler is implemented with the dongle which handle the coder who can take them.
+The two schedulers are implemented with the dongle which handles the coders who can take them.
 
 #### Cooldown handling
 
@@ -186,17 +186,17 @@ The cooldown is implemented by using `gettimeofday` with some basic condition an
 
 #### Burnout detection
 
-To detect the burnout, we used another thread to check the burnout time. To do that, he checks every coder last_compile time and check if the current time minus the last compile time is greater than the burnout time.
+To detect the burnout, we used another thread to check the burnout time. To do that, it checks every coder's last_compile time and checks if the current time minus the last compile time is greater than the burnout time.
 
 #### Log serialization
 
-The log is made by using the `print_state` function which lock a mutex, print the state and the unlock the mutex.
+The log is made by using the `print_state` function which locks a mutex, prints the state and then unlocks the mutex.
 
 ### Thread synchronization mechanisms
 
 #### Pthread_mutex_t
 
-Mutex are used to avoid race condition by locking every variable that can be acquired by multiple thread. And also manage dongle acquisition by locking the dongle and releasing only after the dongle is used.
+Mutexes are used to avoid race conditions by locking every variable that can be acquired by multiple threads. They also manage dongle acquisition by locking the dongle and releasing it only after the dongle is used.
 
 #### Pthread_cond_t
 
@@ -204,12 +204,12 @@ Cond is used to make the coder sleep if they cannot take the dongle and wakes up
 
 #### custom event implementation
 
-To start every coders. `Pthread_cond_t` was not enough because sometimes not every thread wakes up. So I used the basic usleep so that it is guaranteed that every coder wakes up or miss the signal.
+To start every coder, `Pthread_cond_t` was not enough because sometimes not every thread wakes up. So I used the basic usleep so that it is guaranteed that every coder wakes up or misses the signal.
 
 #### Example of race condition
 
-Race condition is handle, like we said before, by using mutex. A basic example is the monitoring where the monitor checks the burnout time. Or the print part of the program where the print can overlap we don't use a mutex.
+Race conditions are handled, like we said before, by using mutexes. A basic example is the monitoring where the monitor checks the burnout time. Or the print part of the program where the prints can overlap if we don't use a mutex.
 
 #### thread-safe communication
 
-A thread-safe communication is made by using function who tell the coders if it their turn (We don't forgot the mutex).
+A thread-safe communication is made by using functions that tell the coders if it's their turn (we don't forget the mutex).
